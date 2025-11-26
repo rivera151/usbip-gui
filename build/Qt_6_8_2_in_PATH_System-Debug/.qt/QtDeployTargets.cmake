@@ -1,2 +1,0 @@
-set(__QT_DEPLOY_TARGET_usbIpGui_FILE /home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/usbIpGui)
-set(__QT_DEPLOY_TARGET_usbIpGui_TYPE EXECUTABLE)
