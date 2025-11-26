@@ -1,0 +1,9 @@
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/usbIpGui.dir
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/edit_cache.dir
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/rebuild_cache.dir
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/list_install_components.dir
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/install.dir
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/install/local.dir
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/install/strip.dir
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/usbIpGui_autogen_timestamp_deps.dir
+/home/ricardo/src/usbIpGui/build/Qt_6_8_2_in_PATH_System-Debug/CMakeFiles/usbIpGui_autogen.dir
