@@ -1,0 +1,32 @@
+# Build directories
+build*/
+cmake-build-*/
+*/build*/
+
+# QtCreator user settings
+*.user
+*.pro.user
+*.qbs.user
+*.qmlproject.user
+*.autosave
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+CTestTestfile.cmake
+cmake_install.cmake
+Makefile
+
+# QtCreator Clangd cache
+.clangd/
+.clangd-cache/
+
+# Binary artifacts
+*.o
+*.so
+*.a
+*.dll
+*.exe
+*.app
+*.dmg
+*.pro.user.*
