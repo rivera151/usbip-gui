@@ -27,16 +27,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     trayManager->setContextMenu(menu);
 
-    // Bind doubleclick to show window
-    connect(trayManager, &TrayIconManager::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
-            {
-                if (reason == QSystemTrayIcon::DoubleClick)
-                    {
-                        this->show();
-                        this->activateWindow();
-                    }
-            }
-    );
+    // // Bind doubleclick to show window
+    // connect(trayManager, &TrayIconManager::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
+    //         {
+    //             if (reason == QSystemTrayIcon::DoubleClick)
+    //                 {
+    //                     this->show();
+    //                     this->activateWindow();
+    //                 }
+    //         }
+    // );
 
     // trayManager->show();
 
@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Double click tray icon to show window
     connect(trayManager, &TrayIconManager::activated, this,
             [this](QSystemTrayIcon::ActivationReason reason) {
-                if (reason == QSystemTrayIcon::DoubleClick) {
+                if (reason == QSystemTrayIcon::Trigger) {
                     this->show();
                     this->activateWindow();
                 }
