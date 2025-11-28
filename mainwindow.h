@@ -23,8 +23,10 @@ public:
 private:
     Ui::MainWindow *ui;
     // QSystemTrayIcon *tray;
-    QMenu *trayMenu;
+    // QMenu *trayMenu;
     TrayIconManager *trayManager;
+    void updateToggleActionText();
+    QAction *toggleAction;
 
 private slots:
     void runUsbip();

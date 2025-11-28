@@ -17,53 +17,84 @@ MainWindow::MainWindow(QWidget *parent)
     // Build tray menu
     QMenu *menu = new QMenu(this);
 
-    menu->addAction("Open Window", this, [this]()
-        {
-            this->show();
-            this->activateWindow();
-        });
+    toggleAction = new QAction("Show Window", this);
+    menu->addAction(toggleAction);
+    // trayMenu->addAction(toggleAction);
+
+    // menu->addAction("Open Window", this, [this]()
+    //     {
+    //         this->show();
+    //         this->activateWindow();
+    //     });
+
     menu->addSeparator();
     menu->addAction("Quit", qApp, &QApplication::quit);
 
     trayManager->setContextMenu(menu);
 
-    // // Bind doubleclick to show window
-    // connect(trayManager, &TrayIconManager::activated, this, [this](QSystemTrayIcon::ActivationReason reason)
-    //         {
-    //             if (reason == QSystemTrayIcon::DoubleClick)
-    //                 {
-    //                     this->show();
-    //                     this->activateWindow();
-    //                 }
-    //         }
-    // );
-
-    // trayManager->show();
+    updateToggleActionText();
 
     // Connect button click to runUsbip()
     connect(ui->btnList, &QPushButton::clicked, this, &MainWindow::runUsbip);
 
     // --- System Tray Setup -----------------------------------
     // tray = new QSystemTrayIcon(this);
-    trayManager->setIcon(QIcon::fromTheme("computer"));  // or your own icon
+    // trayManager->setIcon(QIcon::fromTheme("computer"));  // or your own icon
 
-    trayMenu = new QMenu(this);
-    trayMenu->addAction("Open Window", this, [this]() {
-        this->show();
-        this->activateWindow();
-    });
-    trayMenu->addSeparator();
-    trayMenu->addAction("Quit", qApp, &QApplication::quit);
+    // trayMenu = new QMenu(this);
+    // trayMenu->addAction("Open Window", this, [this]() {
+    //                 if (this->isVisible())
+    //                 {
+    //                     this->hide();
+    //                 } else
+    //                 {
+    //                     // Hack to make the new application cursor animation not show most of the time
+    //                     this->setWindowState(Qt::WindowNoState);
+    //                     this->show();
+    //                     this->raise();
+    //                     this->activateWindow();
+    //                 }
+    // });
+    // trayMenu->addSeparator();
+    // trayMenu->addAction("Quit", qApp, &QApplication::quit);
 
-    trayManager->setContextMenu(trayMenu);
+    connect(toggleAction, &QAction::triggered, this, [this]()
+        {
+            if (this->isVisible())
+            {
+                this->hide();
+            } else
+            {
+                // Hack to make the new application cursor animation not show most of the time
+                this->setWindowState(Qt::WindowNoState);
+                this->show();
+                this->raise();
+                this->activateWindow();
+            }
+            updateToggleActionText();
+        });
+
+    // trayManager->setContextMenu(trayMenu);
 
     // Double click tray icon to show window
     connect(trayManager, &TrayIconManager::activated, this,
             [this](QSystemTrayIcon::ActivationReason reason) {
-                if (reason == QSystemTrayIcon::Trigger) {
-                    this->show();
-                    this->activateWindow();
+                if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick)
+                {
+                    if (this->isVisible())
+                    {
+                        this->hide();
+                    } else
+                    {
+                        // Hack to make the new application cursor animation not show most of the time
+                        this->setWindowState(Qt::WindowNoState);
+                        this->show();
+                        this->raise();
+                        this->activateWindow();
+                    }
+                    updateToggleActionText();
                 }
+
             });
 
     trayManager->show();
@@ -97,7 +128,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         this->hide();
         event->ignore();
-    }
-    else
+        updateToggleActionText();
+    } else
         QMainWindow::closeEvent(event);
+}
+
+void MainWindow::updateToggleActionText()
+{
+    if (this->isVisible())
+        toggleAction->setText("Hide Window");
+    else
+        toggleAction->setText("Show Window");
 }
