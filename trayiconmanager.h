@@ -1,12 +1,14 @@
 #ifndef TRAYICONMANAGER_H
 #define TRAYICONMANAGER_H
 
+#ifdef HAVE_APPINDICATOR
+#include <libayatana-appindicator/app-indicator.h>
+#endif
+
 #pragma once
 
-#include <QObject>
-#include <QSystemTrayIcon>
-#include <QMenu>
-#include <QIcon>
+#include <qsystemtrayicon.h>
+
 
 class TrayIconManager : public QObject
 {
@@ -19,12 +21,20 @@ public:
     void setContextMenu(QMenu *menu);
     void show();
     void hide();
+    void refreshMenu();
 
 signals:
     void activated(QSystemTrayIcon::ActivationReason reason);
 
 private:
-    QSystemTrayIcon *tray;
+#ifdef HAVE_APPINDICATOR
+    AppIndicator *indicator = nullptr;
+#endif
+    QSystemTrayIcon *tray = nullptr;
+
+    bool useIndicator = false;
+
+    QMenu *m_qmenu = nullptr;
 };
 
 

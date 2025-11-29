@@ -1,9 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include <QProcess>
-#include <QMenu>
-#include <QSystemTrayIcon>
-#include <QCloseEvent>
+#include <qevent.h>
+#include <qmenu.h>
+#include <qprocess.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,13 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     toggleAction = new QAction("Show Window", this);
     menu->addAction(toggleAction);
-    // trayMenu->addAction(toggleAction);
-
-    // menu->addAction("Open Window", this, [this]()
-    //     {
-    //         this->show();
-    //         this->activateWindow();
-    //     });
 
     menu->addSeparator();
     menu->addAction("Quit", qApp, &QApplication::quit);
@@ -36,27 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connect button click to runUsbip()
     connect(ui->btnList, &QPushButton::clicked, this, &MainWindow::runUsbip);
-
-    // --- System Tray Setup -----------------------------------
-    // tray = new QSystemTrayIcon(this);
-    // trayManager->setIcon(QIcon::fromTheme("computer"));  // or your own icon
-
-    // trayMenu = new QMenu(this);
-    // trayMenu->addAction("Open Window", this, [this]() {
-    //                 if (this->isVisible())
-    //                 {
-    //                     this->hide();
-    //                 } else
-    //                 {
-    //                     // Hack to make the new application cursor animation not show most of the time
-    //                     this->setWindowState(Qt::WindowNoState);
-    //                     this->show();
-    //                     this->raise();
-    //                     this->activateWindow();
-    //                 }
-    // });
-    // trayMenu->addSeparator();
-    // trayMenu->addAction("Quit", qApp, &QApplication::quit);
 
     connect(toggleAction, &QAction::triggered, this, [this]()
         {
@@ -139,4 +110,6 @@ void MainWindow::updateToggleActionText()
         toggleAction->setText("Hide Window");
     else
         toggleAction->setText("Show Window");
+
+    trayManager->refreshMenu();
 }

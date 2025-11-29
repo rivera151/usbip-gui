@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include "trayiconmanager.h"
-#include <QMainWindow>
-#include <QSystemTrayIcon>
-#include <QMenu>
+// #include <QSystemTrayIcon>
+#include <qmenu.h>
+#include <qmainwindow.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
