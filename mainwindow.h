@@ -2,9 +2,13 @@
 #define MAINWINDOW_H
 
 #include "trayiconmanager.h"
-// #include <QSystemTrayIcon>
 #include <qmenu.h>
 #include <qmainwindow.h>
+#include <qtreewidget.h>
+
+#include "usbipclient.h"
+#include "usbiptypes.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,17 +23,22 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void addHost(const QString &hostname);
 
 private:
     Ui::MainWindow *ui;
-    // QSystemTrayIcon *tray;
-    // QMenu *trayMenu;
     TrayIconManager *trayManager;
     void updateToggleActionText();
     QAction *toggleAction;
+    UsbipClient *usbipClient;
+    QHash<QString, QTreeWidgetItem*> hostItems;
+    QTimer *refreshTimer;
 
-private slots:
+private Q_SLOTS:
     void runUsbip();
+    void onHostDevicesUpdated(const QString &hostname, const QList<UsbipDevice> &devices);
+    void onHostError(const QString &hostname, const QString &errorMessage);
+    void onPortListUpdated(const QList<UsbipAttachedDevice> &attached);
 
 protected:
     void closeEvent(QCloseEvent *event) override;

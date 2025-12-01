@@ -12,6 +12,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+add_definitions(-DQT_NO_KEYWORDS)
+#target_compile_definitions(usbIpGui PRIVATE QT_NO_KEYWORDS)
+
 # find_package(PkgConfig)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(APPINDICATOR ayatana-appindicator3-0.1)
@@ -47,6 +50,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         usbiptypes.h
         usbipclient.h
         usbipclient.cpp
+        hostsdialog.h hostsdialog.cpp hostsdialog.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET usbIpGui APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

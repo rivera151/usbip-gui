@@ -23,7 +23,7 @@ public:
     void hide();
     void refreshMenu();
 
-signals:
+Q_SIGNALS:
     void activated(QSystemTrayIcon::ActivationReason reason);
 
 private:

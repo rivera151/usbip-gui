@@ -1,5 +1,13 @@
 #ifndef GTKMENUSHIM_H
 #define GTKMENUSHIM_H
+
+#ifdef signals
+#undef signals
+#endif
+#ifdef slots
+#undef slots
+#endif
+
 #include "gtk/gtk.h"
 #include <qmenu.h>
 

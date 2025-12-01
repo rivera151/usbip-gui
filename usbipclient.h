@@ -15,13 +15,22 @@ public:
 
     void refreshHost(const QString &hostname);
 
-signals:
+    void attachDevice(const QString &hostname, const QString &busid);
 
-    void hostDevicesUpdated(const QString &hostname, const QList<UsbipDevice> &devices);
+    void detachPort(const int port);
 
-    void hostError(const QString &hostName, const QString &errorMessage);
+    void refreshPorts();
 
-private slots:
+Q_SIGNALS:
+    void hostDevicesUpdated(const QString &hostname,
+                            const QList<UsbipDevice> &devices);
+
+    void hostError(const QString &hostname,
+                   const QString &errorMessage);
+
+    void portListUpdated(const QList<UsbipAttachedDevice> &attached);
+
+private Q_SLOTS:
     void onProcessFinished(int exitCode, QProcess::ExitStatus status);
 
 private:
@@ -29,7 +38,18 @@ private:
     QString currentHost;
 
     QList<UsbipDevice> parseUsbipListOutput(const QString &output) const;
+    QList<UsbipAttachedDevice> parseUsbipPortOutput(const QString &output)
+        const;
 
+    enum class Operation
+    {
+        None,
+        List,
+        Attach,
+        Detach
+    };
+
+    Operation currentOp = Operation::None;
 };
 
 #endif // USBIPCLIENT_H

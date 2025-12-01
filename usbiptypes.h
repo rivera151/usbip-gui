@@ -16,4 +16,10 @@ struct UsbipDevice
     int     port = -1;          // usbip port if attached (from usbip attach output)
 };
 
+struct UsbipAttachedDevice
+{
+    int port;
+    QString busid;
+};
+
 #endif // USBIPTYPES_H

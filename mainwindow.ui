@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>801</width>
+    <height>603</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -35,10 +35,34 @@
       <height>541</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
      <property name="sizeConstraint">
       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
      </property>
+     <item>
+      <widget class="QTreeWidget" name="treeUsbip">
+       <column>
+        <property name="text">
+         <string>Name</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Bus ID</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Vendor</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Product</string>
+        </property>
+       </column>
+      </widget>
+     </item>
      <item>
       <widget class="QTextEdit" name="outputBox"/>
      </item>
@@ -57,7 +81,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>801</width>
      <height>23</height>
     </rect>
    </property>
