@@ -5,6 +5,12 @@
 #include <qevent.h>
 #include <qmenu.h>
 #include <qprocess.h>
+ #include <QStandardPaths>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,17 +18,28 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // usbIpClient needs to be initialized to call loadHostsFromDisk();
+
+    usbipClient = new UsbipClient(this);
+
+    loadHostsFromDisk();
+
     trayManager = new TrayIconManager(this);
     trayManager->setIcon(QIcon::fromTheme("computer"));
 
     // Build tray menu
     QMenu *menu = new QMenu(this);
 
+    // toggle window action
     toggleAction = new QAction("Show Window", this);
     menu->addAction(toggleAction);
 
+    // TODO: Consider moving to member variable
     QAction *hostsAction = new QAction("Hosts...", this);
     menu->addAction(hostsAction);
+
+    quitAction = new QAction("Quit");
+    menu->addAction(quitAction);
 
     connect(hostsAction, &QAction::triggered, this,
         [this]()
@@ -53,12 +70,23 @@ MainWindow::MainWindow(QWidget *parent)
                     }
                 }
 
+                saveHostsToDisk();
+
             }
         }
     );
 
     menu->addSeparator();
-    menu->addAction("Quit", qApp, &QApplication::quit);
+
+    // Setup Quit Menu item
+    //menu->addAction("Quit", qApp, &QApplication::quit);
+    connect(quitAction, &QAction::triggered, this,
+        [this]()
+        {
+            saveHostsToDisk();
+            QApplication::quit();
+        }
+    );
 
     trayManager->setContextMenu(menu);
 
@@ -109,7 +137,7 @@ MainWindow::MainWindow(QWidget *parent)
 
             });
 
-    usbipClient = new UsbipClient(this);
+    // usbipClient = new UsbipClient(this);
 
     connect(usbipClient, &UsbipClient::hostDevicesUpdated, this,
             &MainWindow::onHostDevicesUpdated);
@@ -327,7 +355,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore();
         updateToggleActionText();
     } else
+    {
+        saveHostsToDisk();
         QMainWindow::closeEvent(event);
+    }
 }
 
 void MainWindow::updateToggleActionText()
@@ -338,4 +369,66 @@ void MainWindow::updateToggleActionText()
         toggleAction->setText("Show Window");
 
     trayManager->refreshMenu();
+}
+
+void MainWindow::loadHostsFromDisk()
+{
+    QString configDir =
+        QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    QString filePath = configDir + "/hosts.json";
+
+    QFile file(filePath);
+    if (!file.exists())
+        return;  // No hosts saved if file doesn't exist
+
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qWarning() << "Failed to open hosts.json";
+        return;
+    }
+
+    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    file.close();
+
+    if (!doc.isObject())
+        return;
+
+    QJsonObject obj = doc.object();
+    QJsonArray arr = obj.value("hosts").toArray();
+
+    for (const QJsonValue &v : arr)
+    {
+        QString host = v.toString();
+        if (!host.isEmpty())
+            addHost(host);
+    }
+}
+
+void MainWindow::saveHostsToDisk()
+{
+    QString configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    QDir().mkpath(configDir);
+    QString filePath = configDir + "/hosts.json";
+
+    QJsonArray arr;
+    for (const QString &h : hostItems.keys())
+    {
+        arr.append(h);
+    }
+
+    QJsonObject obj;
+    obj.insert("hosts", arr);
+
+    QJsonDocument doc(obj);
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        qWarning() << "Failed to write hosts.json";
+        return;
+    }
+
+    file.write(doc.toJson());
+    file.close();
+
 }

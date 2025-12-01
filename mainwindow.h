@@ -33,6 +33,9 @@ private:
     UsbipClient *usbipClient;
     QHash<QString, QTreeWidgetItem*> hostItems;
     QTimer *refreshTimer;
+    void loadHostsFromDisk();
+    void saveHostsToDisk();
+    QAction *quitAction;
 
 private Q_SLOTS:
     void runUsbip();
